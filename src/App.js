@@ -1,25 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [reminders, setReminders] = useState([]);
+  const [newReminder, setNewReminder] = useState("");
+
+  const handleInputChange = (e) => {
+    setNewReminder(e.target.value);
+  };
+
+  const handleAddReminder = () => {
+    if (newReminder.trim()) {
+      setReminders([...reminders, newReminder]);
+      setNewReminder("");
+    }
+  };
+
+  const handleDeleteReminder = (reminder) => {
+    setReminders(reminders.filter((r) => r !== reminder));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Reminder App</h1>
+      <div className="input-container">
+        <input
+          type="text"
+          value={newReminder}
+          onChange={handleInputChange}
+          placeholder="Enter a reminder"
+        />
+        <button className="add-btn" onClick={handleAddReminder}>
+          Add Reminder
+        </button>
+      </div>
+      {reminders.length > 0 ? (
+        <ul className="reminders-list">
+          {reminders.map((reminder, index) => (
+            <li key={index}>
+              {reminder}
+              <button className="delete-btn" onClick={() => handleDeleteReminder(reminder)}>
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="no-reminders">No reminders</p>
+      )}
     </div>
   );
-}
+};
 
 export default App;
